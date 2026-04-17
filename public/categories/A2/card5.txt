@@ -1,0 +1,10 @@
+An object
+A room in a house
+A noun
+A verb
+A color
+A number
+An animal
+A job
+A food
+A hobby

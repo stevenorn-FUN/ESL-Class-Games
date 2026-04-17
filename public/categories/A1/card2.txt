@@ -1,0 +1,10 @@
+A vegetable
+A toy
+A drink
+A pet
+A shape
+A month
+A body part
+A piece of clothing
+A room
+A furniture item

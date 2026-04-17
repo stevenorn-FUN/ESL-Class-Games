@@ -1,0 +1,10 @@
+Hospital
+Transportation
+Workplace
+An adjective
+A number
+A country
+A job
+A food
+A feeling
+A verb

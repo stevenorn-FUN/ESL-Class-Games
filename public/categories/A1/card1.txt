@@ -1,0 +1,10 @@
+A color
+A food
+An animal
+A country
+A boy's name
+A girl's name
+A number
+A day of the week
+A fruit
+A sport

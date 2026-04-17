@@ -1,0 +1,10 @@
+A food
+A job
+A color
+An animal
+A place in a city
+A number
+A fruit
+A body part
+A drink
+A day of the week

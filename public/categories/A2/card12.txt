@@ -1,0 +1,10 @@
+A food
+A hobby
+A past activity
+A country
+A travel item
+A number
+A color
+A job
+A place in a city
+A day of the week

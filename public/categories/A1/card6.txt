@@ -1,0 +1,10 @@
+A dinner food
+A breakfast food
+A hot drink
+A cold drink
+A soft thing
+A hard thing
+A big thing
+A small thing
+An animal
+A job

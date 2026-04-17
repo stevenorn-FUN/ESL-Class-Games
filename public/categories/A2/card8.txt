@@ -1,0 +1,10 @@
+A fruit
+A vegetable
+A drink
+An ingredient
+A color
+A number
+A country
+A job
+A place to eat
+A hobby

@@ -1,0 +1,10 @@
+A household object
+Hospital
+Bank
+An animal
+A number
+A country
+A job
+A food
+A hobby
+A past simple verb

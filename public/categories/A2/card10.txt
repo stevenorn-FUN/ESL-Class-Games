@@ -1,0 +1,10 @@
+A room in a house
+A piece of furniture
+A pet
+A thing in a house
+A color
+A number
+A country
+A job
+A food
+A hobby
