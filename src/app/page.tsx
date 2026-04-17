@@ -344,8 +344,13 @@ export default function ESLLetterChallenge() {
           ) : hideCategories ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {currentCategories.map((_: string, index: number) => (
-                <div key={index} className="p-4 bg-gray-50 rounded-lg border border-dashed border-gray-300 h-14 flex items-center">
-                  <span className="font-semibold text-gray-300">{index + 1}.</span>
+                <div key={index} className="p-2 bg-gray-50 rounded-lg border border-dashed border-gray-300 h-14 flex items-center gap-2">
+                  <span className="font-semibold text-gray-400 pl-2 shrink-0">{index + 1}.</span>
+                  <input
+                    type="text"
+                    className="flex-1 bg-transparent outline-none text-gray-700 font-semibold placeholder-gray-300"
+                    placeholder="write category here..."
+                  />
                 </div>
               ))}
             </div>
