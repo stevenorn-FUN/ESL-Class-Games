@@ -3,7 +3,7 @@ A hobby
 A past activity
 A country
 A travel item
-A number
+A store
 A color
 A job
 A place in a city

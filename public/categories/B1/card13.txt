@@ -3,7 +3,7 @@ A family problem
 A piece of advice
 A household chore
 A color
-A number
+An object
 A country
 A job
 A food

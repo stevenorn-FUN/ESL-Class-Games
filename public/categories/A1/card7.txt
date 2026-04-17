@@ -3,7 +3,7 @@ A country
 A drink
 A color
 A job
-A number
+A store
 A fruit
 A place in a city
 A thing at school

@@ -7,4 +7,4 @@ A country
 A job
 A food
 A feeling
-A verb
+A past simple verb

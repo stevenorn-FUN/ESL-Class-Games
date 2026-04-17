@@ -4,7 +4,7 @@ An item at work
 A cooking verb
 An ingredient
 A food
-A number
+A present simple verb
 A country
 A place to eat
 An adjective

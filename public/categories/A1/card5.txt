@@ -4,7 +4,7 @@ A boy's name
 A girl's name
 A color
 A transportation
-A day of the week
+A country
 A family member
 A store
-A number
+A drink

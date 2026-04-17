@@ -3,7 +3,7 @@ A kitchen item
 A place to shop
 A place to eat
 A color
-A number
+An animal
 A country
 A job
 A food

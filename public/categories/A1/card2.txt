@@ -3,7 +3,7 @@ A toy
 A drink
 A pet
 A shape
-A month
+A fruit
 A body part
 A piece of clothing
 A room

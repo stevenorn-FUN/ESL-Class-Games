@@ -3,7 +3,7 @@ A piece of furniture
 A pet
 A thing in a house
 A color
-A number
+A store
 A country
 A job
 A food

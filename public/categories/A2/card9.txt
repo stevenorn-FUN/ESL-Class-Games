@@ -3,7 +3,7 @@ A skill
 Family 
 School
 A color
-A number
+An animal
 A country
 A food
 A hobby

@@ -3,7 +3,7 @@ A room in a house
 A noun
 A verb
 A color
-A number
+A person
 An animal
 A job
 A food

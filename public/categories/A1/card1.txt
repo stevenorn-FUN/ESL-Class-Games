@@ -4,7 +4,7 @@ An animal
 A country
 A boy's name
 A girl's name
-A number
-A day of the week
+A store
+A holiday
 A fruit
 A sport

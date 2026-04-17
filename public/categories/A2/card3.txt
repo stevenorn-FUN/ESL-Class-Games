@@ -4,7 +4,7 @@ A food
 A room
 Clothes
 A workplace
-A number
+A store
 A feeling
 A hobby
 A building

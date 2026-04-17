@@ -4,7 +4,7 @@ A job
 A classroom object
 A hobby
 A place in a house
-A number
+A person
 A feeling
 A building
 A drink

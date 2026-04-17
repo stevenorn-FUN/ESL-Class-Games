@@ -3,7 +3,7 @@ A job
 A color
 An animal
 A place in a city
-A number
+A store
 A fruit
 A body part
 A drink

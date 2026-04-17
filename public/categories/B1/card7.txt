@@ -2,7 +2,7 @@ A household object
 Hospital
 Bank
 An animal
-A number
+A relative
 A country
 A job
 A food

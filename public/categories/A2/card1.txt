@@ -6,5 +6,5 @@ A noun
 A place
 A verb
 A body part
-A season
+Weather
 A family member
