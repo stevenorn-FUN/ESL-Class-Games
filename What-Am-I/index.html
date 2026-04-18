@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What Am I? — ESL Class Game</title>
+  <style>
+    :root {
+      --easy:       #10b981;
+      --medium:     #f59e0b;
+      --hard:       #ef4444;
+      --impossible: #8b5cf6;
+      --bg:         #0d0d1a;
+      --surface:    #16213e;
+      --border:     #1e2d4a;
+      --text:       #f1f5f9;
+      --muted:      #64748b;
+      --accent:     #6366f1;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      user-select: none;
+    }
+
+    /* ── Screens ─────────────────────────────────────── */
+    .screen { display: none; min-height: 100vh; flex-direction: column; }
+    .screen.active { display: flex; }
+
+    /* ══════════════════════════════════════════════════
+       SETUP SCREEN
+    ══════════════════════════════════════════════════ */
+    #screen-setup {
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      gap: 40px;
+      background: radial-gradient(ellipse at top, #1a1a3e 0%, var(--bg) 70%);
+    }
+
+    .setup-title h1 {
+      font-size: clamp(2.5rem, 7vw, 4.5rem);
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: -2px;
+      background: linear-gradient(135deg, #818cf8, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .setup-title p {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-top: 8px;
+    }
+
+    .setup-body {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .setup-section h2 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    /* Mode cards */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .mode-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      cursor: pointer;
+      text-align: left;
+      color: var(--text);
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .mode-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .mode-card.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 8px 24px rgba(99,102,241,0.25); }
+
+    .mode-icon { font-size: 2rem; display: block; margin-bottom: 10px; }
+    .mode-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+    .mode-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
+
+    /* Timer buttons */
+    .time-btn-group, .diff-btn-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .time-btn, .diff-btn {
+      padding: 10px 22px;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .time-btn:hover { border-color: var(--accent); }
+    .time-btn.active { border-color: var(--accent); background: var(--accent); color: #fff; }
+
+    .diff-btn.easy   { border-color: #1a3a2a; }
+    .diff-btn.medium { border-color: #3a2a0a; }
+    .diff-btn.hard   { border-color: #3a0a0a; }
+    .diff-btn.impossible { border-color: #2a1a4a; }
+    .diff-btn.easy.active   { background: var(--easy);       border-color: var(--easy);       color: #000; }
+    .diff-btn.medium.active { background: var(--medium);     border-color: var(--medium);     color: #000; }
+    .diff-btn.hard.active   { background: var(--hard);       border-color: var(--hard);       color: #fff; }
+    .diff-btn.impossible.active { background: var(--impossible); border-color: var(--impossible); color: #fff; }
+    .diff-btn:hover { filter: brightness(1.2); transform: translateY(-1px); }
+
+    /* Setup actions */
+    .setup-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    .btn-rules {
+      padding: 14px 28px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-rules:hover { border-color: var(--muted); background: var(--surface); }
+
+    .btn-start {
+      padding: 14px 40px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #6366f1, #818cf8);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+    }
+    .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.5); }
+    .btn-start:active { transform: translateY(0); }
+
+    /* ══════════════════════════════════════════════════
+       RULES SCREEN
+    ══════════════════════════════════════════════════ */
+    #screen-rules {
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      background: radial-gradient(ellipse at top, #1a1a3e 0%, var(--bg) 70%);
+    }
+
+    .rules-container {
+      max-width: 800px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .rules-container > h1 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      text-align: center;
+      background: linear-gradient(135deg, #818cf8, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .rule-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .rule-num {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .rule-card p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    .rule-card p strong { color: #fff; }
+
+    .helper-questions-section h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .helper-intro {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 14px;
+    }
+
+    .helper-q-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hq {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      color: #94a3b8;
+    }
+
+    .rules-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+    }
+
+    .btn-back {
+      padding: 14px 28px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-back:hover { border-color: var(--muted); background: var(--surface); }
+
+    /* ══════════════════════════════════════════════════
+       GAME SCREEN
+    ══════════════════════════════════════════════════ */
+    #screen-game {
+      background: var(--bg);
+    }
+
+    .game-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 28px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .game-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .diff-badge {
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .diff-badge.easy       { background: #0a2a1a; color: var(--easy); }
+    .diff-badge.medium     { background: #2a1a00; color: var(--medium); }
+    .diff-badge.hard       { background: #2a0a0a; color: var(--hard); }
+    .diff-badge.impossible { background: #1a0a2a; color: var(--impossible); }
+
+    .card-counter {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    /* Timer */
+    .timer-wrap {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .timer-svg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .timer-track {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 6;
+    }
+
+    .timer-ring {
+      fill: none;
+      stroke: var(--easy);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 226;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear, stroke 0.5s;
+    }
+
+    .timer-num {
+      font-size: 1.3rem;
+      font-weight: 800;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Score */
+    .score-wrap {
+      display: flex;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .score-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .score-num {
+      font-size: 1.6rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .score-num.correct { color: var(--easy); }
+    .score-num.skipped { color: var(--muted); }
+
+    .score-label-sm {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    /* Header right side spacer for infinite mode */
+    .header-spacer { width: 80px; }
+
+    /* Helper bar */
+    .helper-bar {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 12px 20px;
+      background: rgba(22,33,62,0.5);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .hq-small {
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 4px 12px;
+    }
+
+    /* Card area */
+    .card-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .word-card {
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 40px;
+      width: 100%;
+      max-width: 700px;
+      min-height: 320px;
+      position: relative;
+    }
+
+    .card-image-wrap {
+      width: 100%;
+      max-height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    .card-image-wrap img {
+      max-width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .card-word {
+      font-size: clamp(3rem, 9vw, 7rem);
+      font-weight: 900;
+      color: #1e293b;
+      text-align: center;
+      line-height: 1.1;
+      letter-spacing: -2px;
+    }
+
+    /* Controls */
+    .game-controls {
+      padding: 20px 28px 28px;
+      display: flex;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .controls-set {
+      display: flex;
+      gap: 16px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .btn-skip, .btn-correct, .btn-next {
+      flex: 1;
+      padding: 18px 20px;
+      border-radius: 16px;
+      border: none;
+      font-size: 1.3rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+      letter-spacing: -0.5px;
+    }
+
+    .btn-skip {
+      background: #f97316;
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(249,115,22,0.35);
+    }
+    .btn-skip:hover   { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(249,115,22,0.5); }
+    .btn-skip:active  { transform: translateY(0); }
+
+    .btn-correct {
+      background: var(--easy);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(16,185,129,0.35);
+    }
+    .btn-correct:hover  { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(16,185,129,0.5); }
+    .btn-correct:active { transform: translateY(0); }
+
+    .btn-next {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(99,102,241,0.35);
+    }
+    .btn-next:hover  { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(99,102,241,0.5); }
+    .btn-next:active { transform: translateY(0); }
+
+    /* Keyboard hint */
+    .key-hint {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      padding-bottom: 8px;
+    }
+
+    /* ══════════════════════════════════════════════════
+       RESULTS SCREEN
+    ══════════════════════════════════════════════════ */
+    #screen-results {
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      background: radial-gradient(ellipse at top, #0a1a0a 0%, var(--bg) 60%);
+    }
+
+    .results-container {
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .results-container h1 {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .final-score-wrap {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+    }
+
+    .final-score-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 36px;
+    }
+
+    .final-score-num {
+      font-size: clamp(3rem, 10vw, 6rem);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .final-score-num.correct { color: var(--easy); }
+    .final-score-num.skipped { color: var(--muted); }
+
+    .final-score-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .results-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-play-again {
+      padding: 14px 36px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, var(--easy), #059669);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 4px 20px rgba(16,185,129,0.4);
+    }
+    .btn-play-again:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(16,185,129,0.5); }
+
+    .btn-change-settings {
+      padding: 14px 28px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-change-settings:hover { border-color: var(--muted); background: var(--surface); }
+
+    /* Flash animation for timeout */
+    @keyframes flash-red {
+      0%   { background: var(--bg); }
+      20%  { background: #3a0a0a; }
+      40%  { background: var(--bg); }
+      60%  { background: #3a0a0a; }
+      80%  { background: var(--bg); }
+      100% { background: var(--bg); }
+    }
+
+    .flash-timeout { animation: flash-red 0.8s ease; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .rules-grid { grid-template-columns: 1fr; }
+      .mode-grid  { grid-template-columns: 1fr; }
+      .final-score-wrap { gap: 16px; }
+      .final-score-item { padding: 20px 24px; }
+      .controls-set { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ SETUP SCREEN ══════════════════════════════════ -->
+  <div id="screen-setup" class="screen active">
+    <div class="setup-title">
+      <h1>What Am I?</h1>
+      <p>A yes/no guessing game for the ESL classroom</p>
+    </div>
+
+    <div class="setup-body">
+
+      <div class="setup-section">
+        <h2>Game Mode</h2>
+        <div class="mode-grid">
+          <button class="mode-card active" data-mode="timed">
+            <span class="mode-icon">⏱️</span>
+            <h3>Timed</h3>
+            <p>Race the clock. Mark each card correct or skip it. See your score at the end!</p>
+          </button>
+          <button class="mode-card" data-mode="infinite">
+            <span class="mode-icon">∞</span>
+            <h3>Infinite</h3>
+            <p>No time limit. Students take turns guessing. Tap Next Card when ready for the next word.</p>
+          </button>
+        </div>
+      </div>
+
+      <div class="setup-section" id="timer-section">
+        <h2>Time Limit</h2>
+        <div class="time-btn-group">
+          <button class="time-btn" data-time="30">30 sec</button>
+          <button class="time-btn active" data-time="60">60 sec</button>
+          <button class="time-btn" data-time="90">90 sec</button>
+          <button class="time-btn" data-time="120">2 min</button>
+        </div>
+      </div>
+
+      <div class="setup-section">
+        <h2>Difficulty</h2>
+        <div class="diff-btn-group">
+          <button class="diff-btn easy active" data-diff="easy">Easy</button>
+          <button class="diff-btn medium" data-diff="medium">Medium</button>
+          <button class="diff-btn hard" data-diff="hard">Hard</button>
+          <button class="diff-btn impossible" data-diff="impossible">Impossible</button>
+        </div>
+      </div>
+
+      <div class="setup-actions">
+        <button class="btn-rules" id="btn-show-rules">📖 How to Play</button>
+        <button class="btn-start" id="btn-start">Play!</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ RULES SCREEN ══════════════════════════════════ -->
+  <div id="screen-rules" class="screen">
+    <div class="rules-container">
+      <h1>How to Play</h1>
+
+      <div class="rules-grid">
+        <div class="rule-card">
+          <span class="rule-num">1</span>
+          <p>One student sits <strong>in front of the screen, facing the class</strong>. They cannot see the screen.</p>
+        </div>
+        <div class="rule-card">
+          <span class="rule-num">2</span>
+          <p>The class can see the word on the screen but <strong>cannot say it, spell it, or act it out</strong>.</p>
+        </div>
+        <div class="rule-card">
+          <span class="rule-num">3</span>
+          <p>The guesser asks <strong>yes or no questions</strong> to figure out what they are.</p>
+        </div>
+        <div class="rule-card">
+          <span class="rule-num">4</span>
+          <p>The class can <strong>only answer yes or no</strong>. When the guesser gets it right, click Correct!</p>
+        </div>
+      </div>
+
+      <div class="helper-questions-section">
+        <h2>💡 Starter Questions for the Guesser</h2>
+        <p class="helper-intro">Start broad, then get more specific:</p>
+        <div class="helper-q-list">
+          <span class="hq">Am I an animal?</span>
+          <span class="hq">Am I a person?</span>
+          <span class="hq">Am I a thing?</span>
+          <span class="hq">Am I a food?</span>
+          <span class="hq">Am I an action?</span>
+          <span class="hq">Am I alive?</span>
+          <span class="hq">Am I big?</span>
+          <span class="hq">Am I found indoors?</span>
+          <span class="hq">Am I found outdoors?</span>
+          <span class="hq">Can people use me?</span>
+          <span class="hq">Do I make noise?</span>
+          <span class="hq">Am I in this classroom?</span>
+        </div>
+      </div>
+
+      <div class="rules-actions">
+        <button class="btn-back" id="btn-rules-back">← Back</button>
+        <button class="btn-start" id="btn-rules-start">Got It! Let's Play →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ GAME SCREEN ═══════════════════════════════════ -->
+  <div id="screen-game" class="screen">
+
+    <div class="game-header" id="game-header">
+      <div class="game-meta">
+        <span class="diff-badge" id="diff-badge">Easy</span>
+        <span class="card-counter" id="card-counter">Card 1</span>
+      </div>
+
+      <!-- Timer (timed mode only) -->
+      <div class="timer-wrap" id="timer-wrap">
+        <svg class="timer-svg" viewBox="0 0 80 80">
+          <circle class="timer-track" cx="40" cy="40" r="34" />
+          <circle class="timer-ring" cx="40" cy="40" r="34" id="timer-ring" />
+        </svg>
+        <span class="timer-num" id="timer-num">60</span>
+      </div>
+
+      <!-- Score (timed mode only) / spacer (infinite) -->
+      <div class="score-wrap" id="score-wrap">
+        <div class="score-item">
+          <span class="score-num correct" id="score-correct">0</span>
+          <span class="score-label-sm">Correct</span>
+        </div>
+        <div class="score-item">
+          <span class="score-num skipped" id="score-skipped">0</span>
+          <span class="score-label-sm">Skipped</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="helper-bar">
+      <span class="hq-small">Am I an animal?</span>
+      <span class="hq-small">Am I a person?</span>
+      <span class="hq-small">Am I a thing?</span>
+      <span class="hq-small">Am I a food?</span>
+      <span class="hq-small">Am I an action?</span>
+      <span class="hq-small">Am I alive?</span>
+      <span class="hq-small">Am I big?</span>
+    </div>
+
+    <div class="card-area">
+      <div class="word-card" id="word-card">
+        <div class="card-image-wrap" id="card-image-wrap" style="display:none">
+          <img id="card-image" src="" alt="" />
+        </div>
+        <div class="card-word" id="card-word">—</div>
+      </div>
+    </div>
+
+    <p class="key-hint" id="key-hint"></p>
+
+    <div class="game-controls">
+      <!-- Timed mode -->
+      <div class="controls-set" id="controls-timed">
+        <button class="btn-skip"    id="btn-skip">Skip →</button>
+        <button class="btn-correct" id="btn-correct">✓ Correct!</button>
+      </div>
+      <!-- Infinite mode -->
+      <div class="controls-set" id="controls-infinite" style="display:none">
+        <button class="btn-next" id="btn-next">Next Card →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ RESULTS SCREEN ════════════════════════════════ -->
+  <div id="screen-results" class="screen">
+    <div class="results-container">
+      <h1 id="results-title">Time's Up! 🎉</h1>
+      <div class="final-score-wrap">
+        <div class="final-score-item">
+          <span class="final-score-num correct" id="final-correct">0</span>
+          <span class="final-score-label">Correct</span>
+        </div>
+        <div class="final-score-item">
+          <span class="final-score-num skipped" id="final-skipped">0</span>
+          <span class="final-score-label">Skipped</span>
+        </div>
+      </div>
+      <div class="results-actions">
+        <button class="btn-play-again" id="btn-play-again">Play Again</button>
+        <button class="btn-change-settings" id="btn-change-settings">Change Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ══════════════════════════════════════════════════
+    // CARD DATA
+    // To add an image to a card, add: image: "filename.jpg"
+    // Place the image file in the matching images/<difficulty>/ folder.
+    // ══════════════════════════════════════════════════
+    const CARDS = {
+      easy: [
+        { word: "Cat" },
+        { word: "Dog" },
+        { word: "Ball" },
+        { word: "Tree" },
+        { word: "Book" },
+        { word: "Car" },
+        { word: "Sun" },
+        { word: "Fish" },
+        { word: "Bird" },
+        { word: "Apple" },
+        { word: "Chair" },
+        { word: "House" },
+        { word: "Baby" },
+        { word: "Milk" },
+        { word: "Shoe" },
+        { word: "Hat" },
+        { word: "Bed" },
+        { word: "Cup" },
+        { word: "Key" },
+        { word: "Door" },
+        { word: "Flower" },
+        { word: "Rain" },
+        { word: "Snow" },
+        { word: "Cake" },
+        { word: "Egg" },
+        { word: "Pen" },
+        { word: "Phone" },
+        { word: "Table" },
+        { word: "Water" },
+        { word: "Bread" },
+        { word: "Bus" },
+        { word: "Bag" },
+        { word: "Star" },
+        { word: "Moon" },
+        { word: "Fire" },
+      ],
+      medium: [
+        { word: "Elephant" },
+        { word: "Guitar" },
+        { word: "Pizza" },
+        { word: "Doctor" },
+        { word: "Teacher" },
+        { word: "Swimming" },
+        { word: "Running" },
+        { word: "Jumping" },
+        { word: "Umbrella" },
+        { word: "Butterfly" },
+        { word: "Astronaut" },
+        { word: "Sandwich" },
+        { word: "Rainbow" },
+        { word: "Dancing" },
+        { word: "Sleeping" },
+        { word: "Cooking" },
+        { word: "Drawing" },
+        { word: "Reading" },
+        { word: "Laughing" },
+        { word: "Climbing" },
+        { word: "Library" },
+        { word: "Hospital" },
+        { word: "Camera" },
+        { word: "Laptop" },
+        { word: "Backpack" },
+        { word: "Farmer" },
+        { word: "Firefighter" },
+        { word: "Magician" },
+        { word: "Tornado" },
+        { word: "Submarine" },
+        { word: "Penguin" },
+        { word: "Dinosaur" },
+        { word: "Popcorn" },
+        { word: "Scissors" },
+        { word: "Baking" },
+      ],
+      hard: [
+        { word: "Volcano" },
+        { word: "Orchestra" },
+        { word: "Photography" },
+        { word: "Whispering" },
+        { word: "Wrestling" },
+        { word: "Meditation" },
+        { word: "Expedition" },
+        { word: "Hibernation" },
+        { word: "Sculptor" },
+        { word: "Politician" },
+        { word: "Acrobat" },
+        { word: "Telescope" },
+        { word: "Microscope" },
+        { word: "Thunderstorm" },
+        { word: "Celebration" },
+        { word: "Graduation" },
+        { word: "Imagination" },
+        { word: "Skeleton" },
+        { word: "Earthquake" },
+        { word: "Archaeology" },
+        { word: "Architecture" },
+        { word: "Marathon" },
+        { word: "Snorkeling" },
+        { word: "Ventriloquist" },
+        { word: "Blacksmith" },
+        { word: "Juggling" },
+        { word: "Parachuting" },
+        { word: "Surfing" },
+        { word: "Negotiating" },
+        { word: "Archaeology" },
+        { word: "Camouflage" },
+        { word: "Electricity" },
+        { word: "Avalanche" },
+        { word: "Navigation" },
+        { word: "Fermentation" },
+      ],
+      impossible: [
+        { word: "Shadow" },
+        { word: "Echo" },
+        { word: "Gravity" },
+        { word: "Traffic" },
+        { word: "Pollution" },
+        { word: "Currency" },
+        { word: "Sneezing" },
+        { word: "Hiccup" },
+        { word: "Temperature" },
+        { word: "Democracy" },
+        { word: "Jealousy" },
+        { word: "Conscience" },
+        { word: "Nostalgia" },
+        { word: "Procrastination" },
+        { word: "Ambition" },
+        { word: "Silence" },
+        { word: "Freedom" },
+        { word: "Justice" },
+        { word: "Patience" },
+        { word: "Wisdom" },
+        { word: "Courage" },
+        { word: "Irony" },
+        { word: "Destiny" },
+        { word: "Karma" },
+        { word: "Paradox" },
+        { word: "Melancholy" },
+        { word: "Sarcasm" },
+        { word: "Turbulence" },
+        { word: "Inflation" },
+        { word: "Momentum" },
+      ],
+    };
+
+    // ══════════════════════════════════════════════════
+    // GAME STATE
+    // ══════════════════════════════════════════════════
+    const state = {
+      mode:         'timed',
+      difficulty:   'easy',
+      timeLimit:    60,
+      timeLeft:     60,
+      timerInterval: null,
+      cards:        [],
+      currentIndex: 0,
+      correct:      0,
+      skipped:      0,
+    };
+
+    // Circumference for timer ring (r=34): 2 * π * 34 ≈ 213.6
+    const RING_CIRCUMFERENCE = 2 * Math.PI * 34;
+
+    // ── DOM refs ──────────────────────────────────────
+    const screens = {
+      setup:   document.getElementById('screen-setup'),
+      rules:   document.getElementById('screen-rules'),
+      game:    document.getElementById('screen-game'),
+      results: document.getElementById('screen-results'),
+    };
+
+    const els = {
+      // Setup
+      modeBtns:     document.querySelectorAll('.mode-card'),
+      timeBtns:     document.querySelectorAll('.time-btn'),
+      diffBtns:     document.querySelectorAll('.diff-btn'),
+      timerSection: document.getElementById('timer-section'),
+      btnShowRules: document.getElementById('btn-show-rules'),
+      btnStart:     document.getElementById('btn-start'),
+      // Rules
+      btnRulesBack:  document.getElementById('btn-rules-back'),
+      btnRulesStart: document.getElementById('btn-rules-start'),
+      // Game
+      diffBadge:       document.getElementById('diff-badge'),
+      cardCounter:     document.getElementById('card-counter'),
+      timerWrap:       document.getElementById('timer-wrap'),
+      timerRing:       document.getElementById('timer-ring'),
+      timerNum:        document.getElementById('timer-num'),
+      scoreWrap:       document.getElementById('score-wrap'),
+      scoreCorrect:    document.getElementById('score-correct'),
+      scoreSkipped:    document.getElementById('score-skipped'),
+      cardWord:        document.getElementById('card-word'),
+      cardImageWrap:   document.getElementById('card-image-wrap'),
+      cardImage:       document.getElementById('card-image'),
+      controlsTimed:   document.getElementById('controls-timed'),
+      controlsInfinite:document.getElementById('controls-infinite'),
+      btnSkip:         document.getElementById('btn-skip'),
+      btnCorrect:      document.getElementById('btn-correct'),
+      btnNext:         document.getElementById('btn-next'),
+      keyHint:         document.getElementById('key-hint'),
+      // Results
+      resultsTitle:   document.getElementById('results-title'),
+      finalCorrect:   document.getElementById('final-correct'),
+      finalSkipped:   document.getElementById('final-skipped'),
+      btnPlayAgain:   document.getElementById('btn-play-again'),
+      btnChangeSettings: document.getElementById('btn-change-settings'),
+    };
+
+    // ── Utility ───────────────────────────────────────
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function showScreen(name) {
+      Object.values(screens).forEach(s => s.classList.remove('active'));
+      screens[name].classList.add('active');
+    }
+
+    // ── Setup interactions ────────────────────────────
+    els.modeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        els.modeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.mode = btn.dataset.mode;
+        els.timerSection.style.display = state.mode === 'timed' ? '' : 'none';
+      });
+    });
+
+    els.timeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        els.timeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.timeLimit = parseInt(btn.dataset.time, 10);
+      });
+    });
+
+    els.diffBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        els.diffBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.difficulty = btn.dataset.diff;
+      });
+    });
+
+    els.btnShowRules.addEventListener('click', () => showScreen('rules'));
+    els.btnRulesBack.addEventListener('click', () => showScreen('setup'));
+
+    els.btnStart.addEventListener('click', startGame);
+    els.btnRulesStart.addEventListener('click', startGame);
+
+    // ── Game logic ────────────────────────────────────
+    function startGame() {
+      state.cards        = shuffle(CARDS[state.difficulty]);
+      state.currentIndex = 0;
+      state.correct      = 0;
+      state.skipped      = 0;
+      state.timeLeft     = state.timeLimit;
+
+      // Update badge
+      els.diffBadge.textContent = capitalize(state.difficulty);
+      els.diffBadge.className   = `diff-badge ${state.difficulty}`;
+
+      // Show/hide mode-specific UI
+      if (state.mode === 'timed') {
+        els.timerWrap.style.display   = '';
+        els.scoreWrap.style.display   = '';
+        els.controlsTimed.style.display    = '';
+        els.controlsInfinite.style.display = 'none';
+        els.keyHint.textContent = '← Skip   |   → Correct';
+        startTimer();
+      } else {
+        els.timerWrap.style.display   = 'none';
+        els.scoreWrap.style.display   = 'none';
+        els.controlsTimed.style.display    = 'none';
+        els.controlsInfinite.style.display = '';
+        els.keyHint.textContent = '→ or Space — Next Card';
+      }
+
+      updateScoreDisplay();
+      showCard();
+      showScreen('game');
+    }
+
+    function showCard() {
+      if (state.currentIndex >= state.cards.length) {
+        // Looped through all cards — reshuffle and continue
+        state.cards = shuffle(CARDS[state.difficulty]);
+        state.currentIndex = 0;
+      }
+
+      const card = state.cards[state.currentIndex];
+
+      els.cardWord.textContent = card.word;
+      els.cardCounter.textContent = `Card ${state.currentIndex + 1}`;
+
+      // Handle image
+      if (card.image) {
+        const src = `images/${state.difficulty}/${card.image}`;
+        els.cardImage.src = src;
+        els.cardImage.alt = card.word;
+        els.cardImageWrap.style.display = '';
+        els.cardImage.onerror = () => {
+          els.cardImageWrap.style.display = 'none';
+        };
+      } else {
+        els.cardImageWrap.style.display = 'none';
+      }
+    }
+
+    function markCorrect() {
+      state.correct++;
+      state.currentIndex++;
+      updateScoreDisplay();
+      showCard();
+    }
+
+    function markSkip() {
+      state.skipped++;
+      state.currentIndex++;
+      updateScoreDisplay();
+      showCard();
+    }
+
+    function nextCard() {
+      state.currentIndex++;
+      showCard();
+    }
+
+    function updateScoreDisplay() {
+      els.scoreCorrect.textContent = state.correct;
+      els.scoreSkipped.textContent = state.skipped;
+    }
+
+    function updateTimerRing() {
+      const progress = state.timeLeft / state.timeLimit;
+      const offset   = RING_CIRCUMFERENCE * (1 - progress);
+      els.timerRing.style.strokeDasharray  = RING_CIRCUMFERENCE;
+      els.timerRing.style.strokeDashoffset = offset;
+      els.timerNum.textContent = state.timeLeft;
+
+      if (progress > 0.5)       els.timerRing.style.stroke = '#10b981';
+      else if (progress > 0.25) els.timerRing.style.stroke = '#f59e0b';
+      else                      els.timerRing.style.stroke = '#ef4444';
+    }
+
+    function startTimer() {
+      clearInterval(state.timerInterval);
+      updateTimerRing();
+
+      state.timerInterval = setInterval(() => {
+        state.timeLeft--;
+        updateTimerRing();
+
+        if (state.timeLeft <= 0) {
+          clearInterval(state.timerInterval);
+          screens.game.classList.add('flash-timeout');
+          setTimeout(() => {
+            screens.game.classList.remove('flash-timeout');
+            showResults();
+          }, 900);
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(state.timerInterval);
+    }
+
+    function showResults() {
+      stopTimer();
+      els.finalCorrect.textContent = state.correct;
+      els.finalSkipped.textContent = state.skipped;
+      showScreen('results');
+    }
+
+    // ── Control buttons ───────────────────────────────
+    els.btnCorrect.addEventListener('click', markCorrect);
+    els.btnSkip.addEventListener('click', markSkip);
+    els.btnNext.addEventListener('click', nextCard);
+
+    els.btnPlayAgain.addEventListener('click', startGame);
+    els.btnChangeSettings.addEventListener('click', () => {
+      stopTimer();
+      showScreen('setup');
+    });
+
+    // ── Keyboard shortcuts ────────────────────────────
+    document.addEventListener('keydown', e => {
+      const activeScreen = Object.keys(screens).find(k => screens[k].classList.contains('active'));
+      if (activeScreen !== 'game') return;
+
+      if (state.mode === 'timed') {
+        if (e.key === 'ArrowRight' || e.key === 'Enter') markCorrect();
+        if (e.key === 'ArrowLeft'  || e.key === ' ')     markSkip();
+      } else {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') nextCard();
+      }
+      e.preventDefault();
+    });
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+  </script>
+</body>
+</html>

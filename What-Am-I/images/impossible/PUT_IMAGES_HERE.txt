@@ -1,0 +1,9 @@
+Place image files in this folder for the Easy difficulty.
+Supported formats: .jpg, .jpeg, .png, .gif, .webp
+
+To link an image to a card, edit the CARDS.easy array in index.html
+and add an "image" field matching the filename. Example:
+  { word: "Cat", image: "cat.jpg" }
+
+Images will display above the word on the card.
+If an image is missing or fails to load, only the word will show.

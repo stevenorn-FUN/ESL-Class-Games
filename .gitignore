@@ -13,12 +13,18 @@
 # testing
 /coverage
 
-# next.js
+# next.js (root and nested)
 /.next/
 /out/
+ESL-Categories-Game/.next/
+ESL-Categories-Game/out/
 
 # production
 /build
+ESL-Categories-Game/build/
+
+# node_modules (root and nested)
+ESL-Categories-Game/node_modules/
 
 # misc
 .DS_Store

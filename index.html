@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ESL Class Games</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 20px 40px;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border-bottom: 1px solid #1e293b;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header p {
+      margin-top: 12px;
+      font-size: 1.1rem;
+      color: #94a3b8;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 24px;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 24px;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .game-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .game-card:hover {
+      transform: translateY(-4px);
+      border-color: #38bdf8;
+      box-shadow: 0 8px 30px rgba(56, 189, 248, 0.15);
+    }
+
+    .game-icon {
+      font-size: 2.5rem;
+      line-height: 1;
+    }
+
+    .game-card h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .game-card p {
+      font-size: 0.92rem;
+      color: #94a3b8;
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #0f172a;
+      color: #38bdf8;
+      border: 1px solid #1e3a5f;
+      border-radius: 99px;
+      padding: 3px 10px;
+      align-self: flex-start;
+    }
+
+    .play-btn {
+      display: block;
+      text-align: center;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 12px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .play-btn:hover {
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+
+    .coming-soon {
+      display: block;
+      text-align: center;
+      background: #0f172a;
+      color: #475569;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 12px 20px;
+      border-radius: 10px;
+      border: 1px dashed #334155;
+      cursor: default;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #475569;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>ESL Class Games</h1>
+    <p>Interactive games for English language learners</p>
+  </header>
+
+  <main>
+    <p class="section-label">Available Games</p>
+    <div class="games-grid">
+
+      <!-- ESL Categories Game -->
+      <div class="game-card">
+        <div class="game-icon">🗂️</div>
+        <h2>Categories Game</h2>
+        <p>Sort vocabulary into categories as fast as you can. Great for reviewing word groups and building fluency.</p>
+        <span class="tag">Vocabulary</span>
+        <a class="play-btn" href="./ESL-Categories-Game/">Play Now</a>
+      </div>
+
+      <!-- What Am I? -->
+      <div class="game-card">
+        <div class="game-icon">🤔</div>
+        <h2>What Am I?</h2>
+        <p>One student sits in front of the screen. The class gives yes/no clues. Timed mode or relaxed infinite mode — you choose!</p>
+        <span class="tag">Speaking &amp; Listening</span>
+        <a class="play-btn" href="./What-Am-I/">Play Now</a>
+      </div>
+
+      <!-- Placeholder — duplicate and fill in when ready -->
+      <div class="game-card">
+        <div class="game-icon">➕</div>
+        <h2>More Coming Soon</h2>
+        <p>New games are on the way. Check back later!</p>
+        <span class="tag">Coming Soon</span>
+        <span class="coming-soon">Not Yet Available</span>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    ESL Class Games &mdash; made for the classroom
+  </footer>
+
+</body>
+</html>
