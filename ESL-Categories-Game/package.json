@@ -24,6 +24,7 @@
     "typescript": "^5"
   },
 
+  "packageManager": "bun@1.2.0",
   "engines": {
     "node": ">=20.0.0"
   },
