@@ -1140,17 +1140,20 @@
       els.cardWord.textContent = card.word;
       els.cardCounter.textContent = `Card ${state.currentIndex + 1}`;
 
-      // Handle image
+      // Handle image — hide word text when image is shown
       if (card.image) {
         const src = `images/${state.difficulty}/${card.image}`;
         els.cardImage.src = src;
         els.cardImage.alt = card.word;
         els.cardImageWrap.style.display = '';
+        els.cardWord.style.display = 'none';
         els.cardImage.onerror = () => {
           els.cardImageWrap.style.display = 'none';
+          els.cardWord.style.display = '';
         };
       } else {
         els.cardImageWrap.style.display = 'none';
+        els.cardWord.style.display = '';
       }
     }
 
