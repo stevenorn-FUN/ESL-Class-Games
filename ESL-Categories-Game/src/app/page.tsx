@@ -23,8 +23,8 @@ const DIFFICULTY_STYLES: Record<string, { bg: string; rolling: string; label: st
   veryHard: { bg: 'bg-gradient-to-br from-red-600 to-purple-700',     rolling: 'bg-gradient-to-br from-purple-400 to-red-500',    label: 'Very Hard', badge: 'bg-red-100 text-red-800',       points: '4 pts' },
 };
 
-const CARD_COUNTS: Record<ESLLevel, number> = {
-  A1: 10, A2: 12, B1: 14, B2: 14, C1: 14, C2: 14,
+const DEFAULT_CARD_COUNTS: Record<ESLLevel, number> = {
+  A1: 0, A2: 0, B1: 0, B2: 0, C1: 0, C2: 0,
 };
 
 function playAlertSound() {
@@ -98,6 +98,7 @@ export default function ESLLetterChallenge() {
   const [timeLeft, setTimeLeft] = useState(180);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [timerInput, setTimerInput] = useState('180');
+  const [cardCounts, setCardCounts] = useState<Record<ESLLevel, number>>(DEFAULT_CARD_COUNTS);
   const [isLoading, setIsLoading] = useState(true);
   const [hideCategories, setHideCategories] = useState(false);
   const alreadyAlertedRef = useRef(false);
@@ -118,6 +119,10 @@ export default function ESLLetterChallenge() {
   };
 
   useEffect(() => {
+    fetch('/api/card-counts')
+      .then(r => r.json())
+      .then(counts => setCardCounts(counts))
+      .catch(() => {});
     loadCategories(eslLevel, currentCardIndex[eslLevel]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -155,7 +160,7 @@ export default function ESLLetterChallenge() {
   const changeLevel = async (level: ESLLevel) => {
     setEslLevel(level);
     const currentIndex = currentCardIndex[level];
-    const totalCards = CARD_COUNTS[level];
+    const totalCards = cardCounts[level];
     let newIndex = Math.floor(Math.random() * totalCards) + 1;
     if (totalCards > 1) {
       while (newIndex === currentIndex) newIndex = Math.floor(Math.random() * totalCards) + 1;
@@ -324,7 +329,7 @@ export default function ESLLetterChallenge() {
             <h2 className="text-2xl font-semibold text-gray-800">
               Categories
               <span className="text-base font-normal text-gray-500 ml-2">
-                (Level: {eslLevel} &mdash; Card {currentCardIndex[eslLevel]}/{CARD_COUNTS[eslLevel]})
+                (Level: {eslLevel} &mdash; Card {currentCardIndex[eslLevel]}/{cardCounts[eslLevel]})
               </span>
             </h2>
             <button
