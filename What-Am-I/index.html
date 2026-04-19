@@ -835,175 +835,26 @@
 
   <script>
     // ══════════════════════════════════════════════════
-    // CARD DATA
-    // To add an image to a card, add: image: "filename.jpg"
-    // Place the image file in the matching images/<difficulty>/ folder.
+    // HOW TO ADD CARDS
+    // 1. Put image files in  images/<difficulty>/
+    // 2. Add the filename to images/<difficulty>/cards.json
+    //    e.g.  ["cat.jpg", "dog.png", "apple.jpg"]
     // ══════════════════════════════════════════════════
-    const CARDS = {
-      easy: [
-        { word: "Cat" },
-        { word: "Dog" },
-        { word: "Ball" },
-        { word: "Tree" },
-        { word: "Book" },
-        { word: "Car" },
-        { word: "Sun" },
-        { word: "Fish" },
-        { word: "Bird" },
-        { word: "Apple" },
-        { word: "Chair" },
-        { word: "House" },
-        { word: "Baby" },
-        { word: "Milk" },
-        { word: "Shoe" },
-        { word: "Hat" },
-        { word: "Bed" },
-        { word: "Cup" },
-        { word: "Key" },
-        { word: "Door" },
-        { word: "Flower" },
-        { word: "Rain" },
-        { word: "Snow" },
-        { word: "Cake" },
-        { word: "Egg" },
-        { word: "Pen" },
-        { word: "Phone" },
-        { word: "Table" },
-        { word: "Water" },
-        { word: "Bread" },
-        { word: "Bus" },
-        { word: "Bag" },
-        { word: "Star" },
-        { word: "Moon" },
-        { word: "Fire" },
-      ],
-      medium: [
-        { word: "Elephant" },
-        { word: "Guitar" },
-        { word: "Pizza" },
-        { word: "Doctor" },
-        { word: "Teacher" },
-        { word: "Swimming" },
-        { word: "Running" },
-        { word: "Jumping" },
-        { word: "Umbrella" },
-        { word: "Butterfly" },
-        { word: "Astronaut" },
-        { word: "Sandwich" },
-        { word: "Rainbow" },
-        { word: "Dancing" },
-        { word: "Sleeping" },
-        { word: "Cooking" },
-        { word: "Drawing" },
-        { word: "Reading" },
-        { word: "Laughing" },
-        { word: "Climbing" },
-        { word: "Library" },
-        { word: "Hospital" },
-        { word: "Camera" },
-        { word: "Laptop" },
-        { word: "Backpack" },
-        { word: "Farmer" },
-        { word: "Firefighter" },
-        { word: "Magician" },
-        { word: "Tornado" },
-        { word: "Submarine" },
-        { word: "Penguin" },
-        { word: "Dinosaur" },
-        { word: "Popcorn" },
-        { word: "Scissors" },
-        { word: "Baking" },
-      ],
-      hard: [
-        { word: "Volcano" },
-        { word: "Orchestra" },
-        { word: "Photography" },
-        { word: "Whispering" },
-        { word: "Wrestling" },
-        { word: "Meditation" },
-        { word: "Expedition" },
-        { word: "Hibernation" },
-        { word: "Sculptor" },
-        { word: "Politician" },
-        { word: "Acrobat" },
-        { word: "Telescope" },
-        { word: "Microscope" },
-        { word: "Thunderstorm" },
-        { word: "Celebration" },
-        { word: "Graduation" },
-        { word: "Imagination" },
-        { word: "Skeleton" },
-        { word: "Earthquake" },
-        { word: "Archaeology" },
-        { word: "Architecture" },
-        { word: "Marathon" },
-        { word: "Snorkeling" },
-        { word: "Ventriloquist" },
-        { word: "Blacksmith" },
-        { word: "Juggling" },
-        { word: "Parachuting" },
-        { word: "Surfing" },
-        { word: "Negotiating" },
-        { word: "Archaeology" },
-        { word: "Camouflage" },
-        { word: "Electricity" },
-        { word: "Avalanche" },
-        { word: "Navigation" },
-        { word: "Fermentation" },
-      ],
-      impossible: [
-        { word: "Shadow" },
-        { word: "Echo" },
-        { word: "Gravity" },
-        { word: "Traffic" },
-        { word: "Pollution" },
-        { word: "Currency" },
-        { word: "Sneezing" },
-        { word: "Hiccup" },
-        { word: "Temperature" },
-        { word: "Democracy" },
-        { word: "Jealousy" },
-        { word: "Conscience" },
-        { word: "Nostalgia" },
-        { word: "Procrastination" },
-        { word: "Ambition" },
-        { word: "Silence" },
-        { word: "Freedom" },
-        { word: "Justice" },
-        { word: "Patience" },
-        { word: "Wisdom" },
-        { word: "Courage" },
-        { word: "Irony" },
-        { word: "Destiny" },
-        { word: "Karma" },
-        { word: "Paradox" },
-        { word: "Melancholy" },
-        { word: "Sarcasm" },
-        { word: "Turbulence" },
-        { word: "Inflation" },
-        { word: "Momentum" },
-      ],
-    };
 
-    // ══════════════════════════════════════════════════
-    // GAME STATE
-    // ══════════════════════════════════════════════════
-    const state = {
-      mode:         'timed',
-      difficulty:   'easy',
-      timeLimit:    60,
-      timeLeft:     60,
-      timerInterval: null,
-      cards:        [],
-      currentIndex: 0,
-      correct:      0,
-      skipped:      0,
-    };
-
-    // Circumference for timer ring (r=34): 2 * π * 34 ≈ 213.6
     const RING_CIRCUMFERENCE = 2 * Math.PI * 34;
 
-    // ── DOM refs ──────────────────────────────────────
+    const state = {
+      mode:          'timed',
+      difficulty:    'easy',
+      timeLimit:     60,
+      timeLeft:      60,
+      timerInterval: null,
+      cards:         [],
+      currentIndex:  0,
+      correct:       0,
+      skipped:       0,
+    };
+
     const screens = {
       setup:   document.getElementById('screen-setup'),
       rules:   document.getElementById('screen-rules'),
@@ -1012,43 +863,37 @@
     };
 
     const els = {
-      // Setup
-      modeBtns:     document.querySelectorAll('.mode-card'),
-      timeBtns:     document.querySelectorAll('.time-btn'),
-      diffBtns:     document.querySelectorAll('.diff-btn'),
-      timerSection: document.getElementById('timer-section'),
-      btnShowRules: document.getElementById('btn-show-rules'),
-      btnStart:     document.getElementById('btn-start'),
-      // Rules
-      btnRulesBack:  document.getElementById('btn-rules-back'),
-      btnRulesStart: document.getElementById('btn-rules-start'),
-      // Game
-      diffBadge:       document.getElementById('diff-badge'),
-      cardCounter:     document.getElementById('card-counter'),
-      timerWrap:       document.getElementById('timer-wrap'),
-      timerRing:       document.getElementById('timer-ring'),
-      timerNum:        document.getElementById('timer-num'),
-      scoreWrap:       document.getElementById('score-wrap'),
-      scoreCorrect:    document.getElementById('score-correct'),
-      scoreSkipped:    document.getElementById('score-skipped'),
-      cardWord:        document.getElementById('card-word'),
-      cardImageWrap:   document.getElementById('card-image-wrap'),
-      cardImage:       document.getElementById('card-image'),
-      controlsTimed:   document.getElementById('controls-timed'),
-      controlsInfinite:document.getElementById('controls-infinite'),
-      btnSkip:         document.getElementById('btn-skip'),
-      btnCorrect:      document.getElementById('btn-correct'),
-      btnNext:         document.getElementById('btn-next'),
-      keyHint:         document.getElementById('key-hint'),
-      // Results
-      resultsTitle:   document.getElementById('results-title'),
-      finalCorrect:   document.getElementById('final-correct'),
-      finalSkipped:   document.getElementById('final-skipped'),
-      btnPlayAgain:   document.getElementById('btn-play-again'),
-      btnChangeSettings: document.getElementById('btn-change-settings'),
+      modeBtns:         document.querySelectorAll('.mode-card'),
+      timeBtns:         document.querySelectorAll('.time-btn'),
+      diffBtns:         document.querySelectorAll('.diff-btn'),
+      timerSection:     document.getElementById('timer-section'),
+      btnShowRules:     document.getElementById('btn-show-rules'),
+      btnStart:         document.getElementById('btn-start'),
+      btnRulesBack:     document.getElementById('btn-rules-back'),
+      btnRulesStart:    document.getElementById('btn-rules-start'),
+      diffBadge:        document.getElementById('diff-badge'),
+      cardCounter:      document.getElementById('card-counter'),
+      timerWrap:        document.getElementById('timer-wrap'),
+      timerRing:        document.getElementById('timer-ring'),
+      timerNum:         document.getElementById('timer-num'),
+      scoreWrap:        document.getElementById('score-wrap'),
+      scoreCorrect:     document.getElementById('score-correct'),
+      scoreSkipped:     document.getElementById('score-skipped'),
+      cardWord:         document.getElementById('card-word'),
+      cardImageWrap:    document.getElementById('card-image-wrap'),
+      cardImage:        document.getElementById('card-image'),
+      controlsTimed:    document.getElementById('controls-timed'),
+      controlsInfinite: document.getElementById('controls-infinite'),
+      btnSkip:          document.getElementById('btn-skip'),
+      btnCorrect:       document.getElementById('btn-correct'),
+      btnNext:          document.getElementById('btn-next'),
+      keyHint:          document.getElementById('key-hint'),
+      finalCorrect:     document.getElementById('final-correct'),
+      finalSkipped:     document.getElementById('final-skipped'),
+      btnPlayAgain:     document.getElementById('btn-play-again'),
+      btnChangeSettings:document.getElementById('btn-change-settings'),
     };
 
-    // ── Utility ───────────────────────────────────────
     function shuffle(arr) {
       const a = [...arr];
       for (let i = a.length - 1; i > 0; i--) {
@@ -1061,6 +906,16 @@
     function showScreen(name) {
       Object.values(screens).forEach(s => s.classList.remove('active'));
       screens[name].classList.add('active');
+    }
+
+    async function fetchCards(difficulty) {
+      try {
+        const res = await fetch(`images/${difficulty}/cards.json`);
+        const filenames = await res.json();
+        return shuffle(filenames);
+      } catch {
+        return [];
+      }
     }
 
     // ── Setup interactions ────────────────────────────
@@ -1091,33 +946,46 @@
 
     els.btnShowRules.addEventListener('click', () => showScreen('rules'));
     els.btnRulesBack.addEventListener('click', () => showScreen('setup'));
-
     els.btnStart.addEventListener('click', startGame);
     els.btnRulesStart.addEventListener('click', startGame);
 
     // ── Game logic ────────────────────────────────────
-    function startGame() {
-      state.cards        = shuffle(CARDS[state.difficulty]);
+    async function startGame() {
+      const filenames = await fetchCards(state.difficulty);
+
+      if (filenames.length === 0) {
+        els.cardWord.textContent = 'No cards found!';
+        els.cardWord.style.display = '';
+        els.cardImageWrap.style.display = 'none';
+        els.cardCounter.textContent = '';
+        showScreen('game');
+        els.controlsTimed.style.display = 'none';
+        els.controlsInfinite.style.display = 'none';
+        els.timerWrap.style.display = 'none';
+        els.scoreWrap.style.display = 'none';
+        els.keyHint.textContent = `Add images to images/${state.difficulty}/ and update cards.json`;
+        return;
+      }
+
+      state.cards        = filenames;
       state.currentIndex = 0;
       state.correct      = 0;
       state.skipped      = 0;
       state.timeLeft     = state.timeLimit;
 
-      // Update badge
-      els.diffBadge.textContent = capitalize(state.difficulty);
+      els.diffBadge.textContent = state.difficulty.charAt(0).toUpperCase() + state.difficulty.slice(1);
       els.diffBadge.className   = `diff-badge ${state.difficulty}`;
 
-      // Show/hide mode-specific UI
       if (state.mode === 'timed') {
-        els.timerWrap.style.display   = '';
-        els.scoreWrap.style.display   = '';
+        els.timerWrap.style.display        = '';
+        els.scoreWrap.style.display        = '';
         els.controlsTimed.style.display    = '';
         els.controlsInfinite.style.display = 'none';
         els.keyHint.textContent = '← Skip   |   → Correct';
         startTimer();
       } else {
-        els.timerWrap.style.display   = 'none';
-        els.scoreWrap.style.display   = 'none';
+        els.timerWrap.style.display        = 'none';
+        els.scoreWrap.style.display        = 'none';
         els.controlsTimed.style.display    = 'none';
         els.controlsInfinite.style.display = '';
         els.keyHint.textContent = '→ or Space — Next Card';
@@ -1130,31 +998,23 @@
 
     function showCard() {
       if (state.currentIndex >= state.cards.length) {
-        // Looped through all cards — reshuffle and continue
-        state.cards = shuffle(CARDS[state.difficulty]);
+        state.cards = shuffle(state.cards);
         state.currentIndex = 0;
       }
 
-      const card = state.cards[state.currentIndex];
+      const filename = state.cards[state.currentIndex];
+      els.cardCounter.textContent = `Card ${state.currentIndex + 1} of ${state.cards.length}`;
 
-      els.cardWord.textContent = card.word;
-      els.cardCounter.textContent = `Card ${state.currentIndex + 1}`;
-
-      // Handle image — hide word text when image is shown
-      if (card.image) {
-        const src = `images/${state.difficulty}/${card.image}`;
-        els.cardImage.src = src;
-        els.cardImage.alt = card.word;
-        els.cardImageWrap.style.display = '';
-        els.cardWord.style.display = 'none';
-        els.cardImage.onerror = () => {
-          els.cardImageWrap.style.display = 'none';
-          els.cardWord.style.display = '';
-        };
-      } else {
+      const src = `images/${state.difficulty}/${filename}`;
+      els.cardImage.src = src;
+      els.cardImage.alt = '';
+      els.cardImageWrap.style.display = '';
+      els.cardWord.style.display = 'none';
+      els.cardImage.onerror = () => {
         els.cardImageWrap.style.display = 'none';
         els.cardWord.style.display = '';
-      }
+        els.cardWord.textContent = filename;
+      };
     }
 
     function markCorrect() {
@@ -1187,7 +1047,6 @@
       els.timerRing.style.strokeDasharray  = RING_CIRCUMFERENCE;
       els.timerRing.style.strokeDashoffset = offset;
       els.timerNum.textContent = state.timeLeft;
-
       if (progress > 0.5)       els.timerRing.style.stroke = '#10b981';
       else if (progress > 0.25) els.timerRing.style.stroke = '#f59e0b';
       else                      els.timerRing.style.stroke = '#ef4444';
@@ -1196,11 +1055,9 @@
     function startTimer() {
       clearInterval(state.timerInterval);
       updateTimerRing();
-
       state.timerInterval = setInterval(() => {
         state.timeLeft--;
         updateTimerRing();
-
         if (state.timeLeft <= 0) {
           clearInterval(state.timerInterval);
           screens.game.classList.add('flash-timeout');
@@ -1212,9 +1069,7 @@
       }, 1000);
     }
 
-    function stopTimer() {
-      clearInterval(state.timerInterval);
-    }
+    function stopTimer() { clearInterval(state.timerInterval); }
 
     function showResults() {
       stopTimer();
@@ -1223,22 +1078,15 @@
       showScreen('results');
     }
 
-    // ── Control buttons ───────────────────────────────
     els.btnCorrect.addEventListener('click', markCorrect);
     els.btnSkip.addEventListener('click', markSkip);
     els.btnNext.addEventListener('click', nextCard);
-
     els.btnPlayAgain.addEventListener('click', startGame);
-    els.btnChangeSettings.addEventListener('click', () => {
-      stopTimer();
-      showScreen('setup');
-    });
+    els.btnChangeSettings.addEventListener('click', () => { stopTimer(); showScreen('setup'); });
 
-    // ── Keyboard shortcuts ────────────────────────────
     document.addEventListener('keydown', e => {
-      const activeScreen = Object.keys(screens).find(k => screens[k].classList.contains('active'));
-      if (activeScreen !== 'game') return;
-
+      const active = Object.keys(screens).find(k => screens[k].classList.contains('active'));
+      if (active !== 'game') return;
       if (state.mode === 'timed') {
         if (e.key === 'ArrowRight' || e.key === 'Enter') markCorrect();
         if (e.key === 'ArrowLeft'  || e.key === ' ')     markSkip();
@@ -1247,10 +1095,6 @@
       }
       e.preventDefault();
     });
-
-    function capitalize(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
   </script>
 </body>
 </html>
